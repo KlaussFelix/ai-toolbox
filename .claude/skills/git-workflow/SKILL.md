@@ -1,6 +1,6 @@
 ---
 name: git-workflow
-description: 'Geführter Git-Workflow für Feature-Entwicklung. Verwenden wenn: neuer Branch benötigt wird, Code-Änderungen commitet werden sollen, Branch-Naming-Convention geprüft werden soll, Merge-Approval eingeholt werden soll. Deckt ab: Branch erstellen, feature/fix/chore/docs/refactor Präfixe, Commit-Bestätigung einholen, Merge-Schutz.'
+description: 'Geführter Git-Workflow für Feature-Entwicklung. Verwenden wenn: neuer Branch benötigt wird, Code-Änderungen commitet werden sollen, Branch-Naming-Convention geprüft werden soll, Merge-Approval eingeholt werden soll. Deckt ab: Branch erstellen, feature/fix/chore/docs/refactor Präfixe, automatische Commits zu sinnvollen Zeitpunkten, Merge-Schutz mit Bestätigung.'
 argument-hint: 'Beschreibe die Aufgabe, z.B. "neues Feature: Login-Seite"'
 ---
 
@@ -9,7 +9,7 @@ argument-hint: 'Beschreibe die Aufgabe, z.B. "neues Feature: Login-Seite"'
 ## Wann verwenden
 - Bei jeder neuen Aufgabe, die Code-Änderungen erfordert
 - Wenn ein neuer Feature-Branch erstellt werden soll
-- Wenn Änderungen commitet werden sollen (Bestätigung erforderlich)
+- Wenn Änderungen commitet werden sollen (automatisch zu sinnvollen Zeitpunkten)
 - Wenn ein Branch in `main` gemergt werden soll (Bestätigung erforderlich)
 
 
@@ -42,15 +42,24 @@ Prüfe, ob die Aufgabe einen neuen Branch erfordert. Wähle das passende Präfix
 
 
 
-## Schritt 3 — Commit-Bestätigung einholen
+## Schritt 3 — Automatisch commiten zu sinnvollen Zeitpunkten
 
-Nach Abschluss der Code-Änderungen:
+Commits erfolgen **automatisch ohne Rückfrage**, sobald ein sinnvoller Zeitpunkt erreicht ist. Gute Zeitpunkte sind z. B.:
 
-1. **NICHT** automatisch commiten
-2. Den Nutzer mit dem `vscode_askQuestions`-Tool fragen:
-   > „Ich habe die Änderungen auf dem Branch `[branch-name]` abgeschlossen. Möchtest du, dass ich die Änderungen committe?"
-3. Nur bei **ausdrücklicher Zustimmung** den Commit durchführen
-4. Commit-Message nach Conventional Commits formulieren (z. B. `feat: add login page`)
+- Eine logisch abgeschlossene Teilaufgabe / Einheit ist fertig (eine Funktion, ein Modul, ein Bugfix)
+- Tests / Build laufen grün, bevor die nächste Teilaufgabe beginnt
+- Bevor ein größerer oder riskanter Umbau begonnen wird (sauberer Zwischenstand)
+- Der Arbeitsstand ist konsistent und würde für sich genommen Sinn ergeben
+
+**Regeln für automatische Commits:**
+
+1. Nur auf dem dafür vorgesehenen Branch commiten — **niemals** direkt auf `main` / `master`
+2. Commit-Message nach Conventional Commits formulieren (z. B. `feat: add login page`)
+3. Pro Commit eine zusammenhängende, in sich abgeschlossene Änderung (keine riesigen Sammel-Commits)
+4. Vor dem Commit kurz prüfen (`git status` / `git diff`), dass nur beabsichtigte Dateien enthalten sind
+5. Keine kaputten Zwischenstände commiten, wenn vermeidbar (Code soll baubar/lauffähig sein)
+
+**Hinweis:** Es ist **keine** Rückfrage vor dem Commit nötig. Die Bestätigungspflicht gilt ausschließlich für Merges (siehe Schritt 4).
 
 
 
@@ -76,11 +85,11 @@ Neuer Branch nötig?
     └── Nein → Auf bestehendem Branch weiterarbeiten
                         │
                         ▼
-              Code-Änderungen abgeschlossen?
+              Sinnvoller Commit-Zeitpunkt erreicht?
                         │
                         ▼
-              Nutzer um Commit-Erlaubnis fragen (vscode_askQuestions)
+              Automatisch commiten (ohne Rückfrage, nur auf Branch)
                         │
                         ▼
-              Merge gewünscht? → Explizites "ok" abwarten
+              Merge gewünscht? → Explizites "ok" abwarten (Pflicht)
 ```
